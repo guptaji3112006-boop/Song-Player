@@ -842,40 +842,53 @@ i {
 
   .navbar {
     flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
   }
 
   .navSearch {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
     align-items: center;
+    gap: 10px;
+  }
+
+  .circle {
+    order: 1;
+  }
+
+  .lastSec {
+    order: 2;
+    margin: 0;
+    padding: 0;
+    width: auto;
   }
 
   .searchBar {
     width: 100%;
     max-width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .lastSec {
-    margin: 0 auto;
-    padding: 0;
-    justify-content: center;
-    width: 100%;
+    order: 3;
+    margin-bottom: 0;
   }
 
   .premium,
   .install {
     display: none;
-    /* Hide on mobile to save space */
   }
 
   .main {
     flex-direction: column;
     height: auto;
-    padding-bottom: 150px;
-    /* Space for bottom player */
+    padding-bottom: 100px;
   }
 
   .left,
@@ -896,32 +909,85 @@ i {
   }
 
   .card-container {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     justify-content: center;
   }
 
+  /* Compact Mobile Player */
   .bottom-player {
-    height: auto;
-    padding: 10px 15px 15px 15px;
-    flex-direction: column;
-    gap: 15px;
+    height: 75px;
+    padding: 10px 15px;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
   }
 
   .player-left {
-    width: 100%;
-    justify-content: center;
+    width: 60%;
+    justify-content: flex-start;
+  }
+
+  .player-left img {
+    height: 45px;
+    width: 45px;
+    border-radius: 5px;
+  }
+
+  .song-info h4 {
+      font-size: 13px;
   }
 
   .player-center {
+    width: 40%;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .player-controls {
+    margin-bottom: 0;
+    gap: 15px;
+  }
+
+  /* Hide non-essential controls on small mobile */
+  #shuffleBtn, #repeatBtn, #prevBtn, .player-left > i {
+    display: none; 
+  }
+
+  /* Premium Mobile Seek Bar - Full width at top edge */
+  .progress-bar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    max-width: 100%;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .progress-bar-container span {
+    display: none; /* Hide text timers for a clean aesthetic */
+  }
+
+  .progress-bar {
+    height: 3px;
+    border-radius: 0;
+  }
+  
+  .progress-bar:hover {
+    height: 5px;
+  }
+
+  .play-btn {
+      font-size: 30px;
   }
 
   .player-right {
     display: none;
-    /* Often hidden on mobile UI */
   }
 
   .search-results {
-    top: 100px;
+    top: 50px;
   }
 }
