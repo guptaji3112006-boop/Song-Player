@@ -1,4 +1,3 @@
-// Music Data - ~50 Curated Tracks
 const musicDatabase = [
     // Bollywood
     { id: 1, title: "Tum Hi Ho", artist: "Arijit Singh", category: "Bollywood", url: "", query: "Tum Hi Ho Arijit Singh" },
@@ -59,12 +58,12 @@ const musicDatabase = [
     { id: 50, title: "Tagdi", artist: "Ajay Hooda", category: "Haryanvi", url: "", query: "Tagdi Ajay Hooda" }
 ];
 
-// Include local songs as part of the library initially
+// Include local songs a
 const localSongs = [
     { title: "Pal Pal", artist: "Talwiinder", url: "./SONGS/Afusic - Pal Pal with Talwiinder.mp3", category: "Punjabi", query: "Pal Pal Talwiinder", cover: "https://i.scdn.co/image/ab67616d00001e0285c5968be0d0d9c545241124" },
     { title: "Tum Hi Ho", artist: "Aashiqui 2", url: "./SONGS/Chahun Main Ya Naa Aashiqui 2 .mp3", category: "Bollywood", query: "Tum Hi Ho", cover: "https://i.scdn.co/image/ab67616d00001e026404721c1943d5069f0805f3" },
     { title: "Finding Her", artist: "Saheel", url: "./SONGS/Finding Her (Jana Mere Sawalon Ka Manzar Tu) .mp3", category: "Bollywood", query: "Finding Her Saheel", cover: "https://i.scdn.co/image/ab67616d00001e02292341cd3e621d7f9171331f" },
-    { title: "Heat Waves", artist: "Glass Animals", url: "./SONGS/Glass Animals - Heat Waves .mp3", category: "Hollywood", query: "Heat Waves Glass Animals", cover: "https://i.scdn.co/image/ab67616d00001e02712701c5e263efc8726b1464" },
+    { title: "Heat Waves", artist: "Glass Animals", url: "./SONGS/Glass Animals - Heat Waves  GlassAnimalsVEVO.mp3", category: "Hollywood", query: "Heat Waves Glass Animals", cover: "https://i.scdn.co/image/ab67616d00001e02712701c5e263efc8726b1464" },
     { title: "Prem Ki Leela", artist: "Krishnavataram", url: "./SONGS/Prem Ki Leela  Krishnavataram .mp3", category: "Bollywood", query: "Prem Ki Leela", cover: "https://i.scdn.co/image/ab67616d00001e02afb5a1c6e757a4b6be2dd943" },
     { title: "Raga of Revenge", artist: "Anirudh Ravichander", url: "./SONGS/Raga of Revenge (From DC) - Anirudh Ravichander.mp3", category: "Bollywood", query: "Raga of Revenge", cover: "https://i.scdn.co/image/ab67616d00001e0233bc5d16517fed8db985360c" },
     { title: "Dhanda Nyoliwala", artist: "Dhanda Nyoliwala", url: "./SONGS/Dhanda Nyoliwala   Dhanda Nyoliwala.mp3", category: "Haryanvi", query: "Dhanda Nyoliwala", cover: "https://i.scdn.co/image/ab67616d00001e0233bc5d16517fed8db985360c" },
@@ -153,7 +152,7 @@ const currentTitle = document.getElementById("currentTitle");
 const currentArtist = document.getElementById("currentArtist");
 const pills = document.querySelectorAll(".pill");
 
-// Helper to format time
+
 function formatTime(seconds) {
     if (isNaN(seconds) || seconds < 0) return "0:00";
     let min = Math.floor(seconds / 60);
@@ -163,9 +162,11 @@ function formatTime(seconds) {
 
 // Play Music Function
 function playMusic(track, index, playlistContext) {
-    if(!track.url) return; // Need a URL to play
+    if(!track.url) return; 
     currentSong.src = track.url;
-    currentSong.play();
+    currentSong.play().catch(error => {
+        console.warn(`Could not play "${track.title}". If it is a local track, the MP3 file might be missing.`);
+    });
     
     currentCover.src = track.cover;
     currentCover.style.display = "block";
@@ -174,14 +175,13 @@ function playMusic(track, index, playlistContext) {
     
     playBtn.classList.remove("fa-circle-play");
     playBtn.classList.add("fa-circle-pause");
-    playBtn.classList.add("playing"); // activates breathing glow
+    playBtn.classList.add("playing");
 
     if (playlistContext) {
         currentPlaylist = playlistContext;
         currentIndex = index;
     }
     
-    // Update active state in sidebar playlist if it exists
     document.querySelectorAll("#playlistContainer li").forEach(li => li.classList.remove("active"));
     const activeLi = Array.from(document.querySelectorAll("#playlistContainer li")).find(li => {
         return li.querySelector('.song-name').innerText === track.title;
@@ -194,13 +194,12 @@ async function renderCards(category) {
     cardContainer.innerHTML = `<div style="width:100%; text-align:center; padding: 40px; color: var(--text-secondary);">Loading tracks...</div>`;
     
     let tracksToRender = category === "All" ? musicDatabase : musicDatabase.filter(m => m.category === category);
-    // Shuffle and pick 10 random for display
+  
     tracksToRender = tracksToRender.sort(() => 0.5 - Math.random()).slice(0, 10);
     
-    // Mix in local songs if applicable
+
     let localMatches = category === "All" ? localSongs : localSongs.filter(l => l.category === category);
     
-    // Dynamically update local song covers
     const enhancedLocalTracks = await Promise.all(localMatches.map(async (localTrack) => {
         if (localTrack.query) {
             const data = await fetchFromSaavn(localTrack.query);
@@ -386,7 +385,7 @@ volumeBar.addEventListener("click", (e) => {
     const barRect = volumeBar.getBoundingClientRect();
     const clickX = e.clientX - barRect.left;
     let percent = clickX / barRect.width;
-    percent = Math.max(0, Math.min(1, percent)); // clamp 0-1
+    percent = Math.max(0, Math.min(1, percent)); 
     currentSong.volume = percent;
     volumeFill.style.width = (percent * 100) + "%";
     volumeThumb.style.left = (percent * 100) + "%";
@@ -412,5 +411,5 @@ muteBtn.addEventListener("click", () => {
     }
 });
 
-// Initial Render
+
 renderCards("All");
